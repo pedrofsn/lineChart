@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         lineChart.setDrawGridBackground(false);
         lineChart.setHighlightPerDragEnabled(true);
 
-        //Values X and Y
+        //FIXME VALORES DA LINHA PRINCIPAL DO GRAFICO (EIXO X, EIXO Y)
         ArrayList<Entry> entries = new ArrayList<>();
         entries.add(new Entry(0, 3));
         entries.add(new Entry(1, 2));
@@ -79,7 +79,6 @@ public class MainActivity extends AppCompatActivity {
         dataSet.setDrawCircleHole(false);
 
 
-
         //FIXME DESCOMENTE PARA INSERIR O DEGRADE ABAIXO DA LINHA
 //        dataSet.setDrawFilled(true);
 //        if (Utils.getSDKInt() >= 18) {
@@ -92,12 +91,10 @@ public class MainActivity extends AppCompatActivity {
 //        dataSet.setDrawCircles(false);
 
 
-
-        // X axis
+        // FIXME EIXO X
         XAxis xAxis = lineChart.getXAxis();
-        // position to bottom. Default is top
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-//        xAxis.setTypeface(tfLight); FIXME INSERIR A FONTE AQUI
+//        xAxis.setTypeface(tfLight); FIXME DESCOMENTE PARA FONTE
         xAxis.setTextSize(10f);
         xAxis.setTextColor(Color.WHITE);
         xAxis.setDrawAxisLine(true);
@@ -125,10 +122,10 @@ public class MainActivity extends AppCompatActivity {
 //        yAxisRight.setDrawGridLines(true);
         yAxisRight.setEnabled(false);
 
-        // Controlling left side of y axis
+        // FIXME EIXO Y
         YAxis yAxisLeft = lineChart.getAxisLeft();
         yAxisLeft.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
-//        leftAxis.setTypeface(tfLight); FIXME INSERIR A FONTE AQUI
+//        leftAxis.setTypeface(tfLight); FIXME DESCOMENTE PARA FONTE
         yAxisLeft.setTextColor(ColorTemplate.getHoloBlue());
 
         //FIXME SE FALSE OCULTA LINHAS VERTICAIS
