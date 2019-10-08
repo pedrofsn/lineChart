@@ -19,6 +19,7 @@ import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.utils.Utils;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Example of a heavily customized {@link LineChart} with limit lines, custom line shapes, etc.
@@ -41,6 +42,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         setTitle("LineChartActivity1");
+
+        // FIXME -> dataset da API
+        List<MyDataItem> items = new ArrayList<>();
+        items.add(new MyDataItem("01/07", 6));
+        items.add(new MyDataItem("10/07", 8));
+        items.add(new MyDataItem("15/07", 10));
+        items.add(new MyDataItem("20/07", 12));
+        MyData myData = new MyData(items);
 
 //        tfLight = Typeface.createFromAsset(getAssets(), "OpenSans-Light.ttf"); FIXME INSERIR A FONTE AQUI
 
