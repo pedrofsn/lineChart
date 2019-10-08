@@ -67,11 +67,8 @@ public class MainActivity extends AppCompatActivity {
         entries.add(new Entry(4, 8));
 
         LineDataSet dataSet = new LineDataSet(entries, "Name lineChart");
-        dataSet.setColor(Color.BLUE);
-//        dataSet.setValueTextColor(Color.WHITE);
-//        dataSet.setMode(LineDataSet.Mode.LINEAR);
+        dataSet.setColor(Color.BLUE); //FIXME COR DA LINHA PRINCIPAL DO GRÁFICO
         dataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
-//        dataSet.setColor(ColorTemplate.getHoloBlue());
         dataSet.setValueTextColor(ColorTemplate.getHoloBlue());
         dataSet.setLineWidth(1.5f);
         dataSet.setDrawCircles(false);
@@ -81,37 +78,38 @@ public class MainActivity extends AppCompatActivity {
         dataSet.setHighLightColor(Color.rgb(244, 117, 117));
         dataSet.setDrawCircleHole(false);
 
-        //FIXME descomente para inserir o degrade abaixo da linha
-
-        dataSet.setDrawFilled(true);
-        if (Utils.getSDKInt() >= 18) {
-            Drawable drawable = ContextCompat.getDrawable(this, R.drawable.fade_blue);
-            dataSet.setFillDrawable(drawable);
-        }
-        else {
-            dataSet.setFillColor(Color.BLACK);
-        }
-        dataSet.setDrawCircles(false);
 
 
-        //****
+        //FIXME DESCOMENTE PARA INSERIR O DEGRADE ABAIXO DA LINHA
+//        dataSet.setDrawFilled(true);
+//        if (Utils.getSDKInt() >= 18) {
+//            Drawable drawable = ContextCompat.getDrawable(this, R.drawable.fade_blue);
+//            dataSet.setFillDrawable(drawable);
+//        }
+//        else {
+//            dataSet.setFillColor(Color.BLACK);
+//        }
+//        dataSet.setDrawCircles(false);
+
+
+
         // X axis
         XAxis xAxis = lineChart.getXAxis();
         // position to bottom. Default is top
-//        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-//        xAxis.setGranularity(1f);
-//        xAxis.setTextColor(Color.WHITE);
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
 //        xAxis.setTypeface(tfLight); FIXME INSERIR A FONTE AQUI
         xAxis.setTextSize(10f);
         xAxis.setTextColor(Color.WHITE);
-        xAxis.setDrawAxisLine(false);
+        xAxis.setDrawAxisLine(true);
+
+        //FIXME SE FALSE OCULTA LINHAS HORIZONTAIS
         xAxis.setDrawGridLines(true);
+        xAxis.setGranularityEnabled(true);
+
         xAxis.setTextColor(Color.rgb(255, 192, 56));
-//        xAxis.setCenterAxisLabels(true);
         xAxis.setGranularity(1f); // one hour
 
-        //x axis value
+        //FIXME VALORES DO EIXO X
         final String[] days = new String[]{"07/05", "14/05", "30/05", "03/06", "12/06", "19/08"};
 
         ValueFormatter formatter = new ValueFormatter() {
@@ -122,23 +120,26 @@ public class MainActivity extends AppCompatActivity {
         };
         xAxis.setValueFormatter(formatter);
 
-        //***
         //right side of y axis
         YAxis yAxisRight = lineChart.getAxisRight();
 //        yAxisRight.setDrawGridLines(true);
         yAxisRight.setEnabled(false);
 
-        //***
         // Controlling left side of y axis
         YAxis yAxisLeft = lineChart.getAxisLeft();
         yAxisLeft.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
 //        leftAxis.setTypeface(tfLight); FIXME INSERIR A FONTE AQUI
         yAxisLeft.setTextColor(ColorTemplate.getHoloBlue());
+
+        //FIXME SE FALSE OCULTA LINHAS VERTICAIS
         yAxisLeft.setDrawGridLines(true);
         yAxisLeft.setGranularityEnabled(true);
+
+        //FIXME VALORES MAX E MIN DO EIXO Y
         yAxisLeft.setAxisMinimum(0f);
         yAxisLeft.setAxisMaximum(15f);
         yAxisLeft.setYOffset(-9f);
+
         yAxisLeft.setTextColor(Color.rgb(255, 192, 56));
 
         // Setting Data
