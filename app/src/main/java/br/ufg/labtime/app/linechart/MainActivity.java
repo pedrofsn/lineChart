@@ -73,11 +73,9 @@ public class MainActivity extends AppCompatActivity {
 
         //FIXME VALORES DA LINHA PRINCIPAL DO GRÁFICO (EIXO X, EIXO Y)
         ArrayList<Entry> entries = new ArrayList<>();
-        entries.add(new Entry(0, 3));
-        entries.add(new Entry(1, 2));
-        entries.add(new Entry(2, 5));
-        entries.add(new Entry(3, 7));
-        entries.add(new Entry(4, 8));
+        for (int x = 0; x < myData.getGrafico().size(); x++) {
+            entries.add(new Entry(x, myData.getGrafico().get(x).getValor()));
+        }
 
         LineDataSet dataSet = new LineDataSet(entries, "");
         dataSet.setColor(colorBabyBlueEyes);
@@ -114,13 +112,16 @@ public class MainActivity extends AppCompatActivity {
         xAxis.setGridColor(colorGridLines);
         xAxis.setGranularity(1f); // one hour
 
-        //FIXME VALORES DO EIXO X
-        final String[] days = new String[]{"07/05", "14/05", "30/05", "03/06", "12/06", "19/08"};
+
+        final ArrayList<String> entriesX = new ArrayList<>();
+        for (int x = 0; x < myData.getGrafico().size(); x++) {
+            entriesX.add(myData.getGrafico().get(x).getData());
+        }
 
         ValueFormatter formatter = new ValueFormatter() {
             @Override
             public String getAxisLabel(float value, AxisBase axis) {
-                return days[(int) value];
+                return entriesX.get((int) value);
             }
         };
         xAxis.setValueFormatter(formatter);
