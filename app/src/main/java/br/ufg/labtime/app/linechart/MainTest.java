@@ -1,4 +1,3 @@
-
 package br.ufg.labtime.app.linechart;
 
 import android.graphics.Color;
@@ -21,13 +20,13 @@ import com.github.mikephil.charting.utils.Utils;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Example of a heavily customized {@link LineChart} with limit lines, custom line shapes, etc.
- *
- * @version 3.1.0
- * @since 1.7.4
- */
-public class MainActivity extends AppCompatActivity {
+public class MainTest extends AppCompatActivity {
+
+    final int colorBackgroundChart = Color.parseColor("#121212");
+    final int colorBabyBlueEyes = Color.parseColor("#0068ff");
+    final int colorGridLines = Color.parseColor("#CC1A1A1A");
+    final int colorAlmostWhite = Color.parseColor("#707070");
+    final boolean showDrawGridLines = true;
 
     public LineChart lineChart;
 //    protected Typeface tfLight;
@@ -39,27 +38,14 @@ public class MainActivity extends AppCompatActivity {
 //          FULLSCREEN
 //        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        setContentView(R.layout.activity_main);
-
-        setTitle("LineChartActivity1");
-
-        // FIXME -> dataset da API
-        List<MyDataItem> items = new ArrayList<>();
-        items.add(new MyDataItem("01/07", 6));
-        items.add(new MyDataItem("10/07", 8));
-        items.add(new MyDataItem("15/07", 10));
-        items.add(new MyDataItem("20/07", 12));
-        MyData myData = new MyData(items);
-
 //        tfLight = Typeface.createFromAsset(getAssets(), "OpenSans-Light.ttf"); FIXME INSERIR A FONTE AQUI
 
-        int colorBackgroundChart = Color.parseColor("#121212");
-        int colorBabyBlueEyes = Color.parseColor("#0068ff");
-        int colorGridLines = Color.parseColor("#CC1A1A1A");
-        int colorAlmostWhite = Color.parseColor("#707070");
-        boolean showDrawGridLines = true;
+        setContentView(R.layout.activity_main);
+        setTitle("LineChartActivity1");
 
+        //referencia
         lineChart = findViewById(R.id.chart1);
+        //background
         lineChart.setBackgroundColor(colorBackgroundChart);
 
         // disable description text
@@ -71,27 +57,40 @@ public class MainActivity extends AppCompatActivity {
         lineChart.setDrawGridBackground(false);
         lineChart.setHighlightPerDragEnabled(true);
 
-        //FIXME VALORES DA LINHA PRINCIPAL DO GRÁFICO (EIXO X, EIXO Y)
-        ArrayList<Entry> entries = new ArrayList<>();
-        entries.add(new Entry(0, 3));
-        entries.add(new Entry(1, 2));
-        entries.add(new Entry(2, 5));
-        entries.add(new Entry(3, 7));
-        entries.add(new Entry(4, 8));
+        // FIXME -> dataset da API
+        List<MyDataItem> items = new ArrayList<>();
+        items.add(new MyDataItem("01/07", 6));
+        items.add(new MyDataItem("10/07", 8));
+        items.add(new MyDataItem("15/07", 10));
+        items.add(new MyDataItem("20/07", 12));
+        MyData myData = new MyData(items);
 
-        LineDataSet dataSet = new LineDataSet(entries, "");
-        dataSet.setColor(colorBabyBlueEyes);
-        dataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
-        dataSet.setValueTextColor(colorAlmostWhite);
-        dataSet.setLineWidth(1.5f);
-        dataSet.setDrawCircles(false);
-        dataSet.setDrawValues(false);
-        dataSet.setFillAlpha(65);
-//        dataSet.setFillColor(ColorTemplate.getHoloBlue());
-//        dataSet.setHighLightColor(Color.rgb(244, 117, 117));
-        dataSet.setDrawCircleHole(false);
 
-        //FIXME DESCOMENTE PARA INSERIR O DEGRADE ABAIXO DA LINHA
+        //eixo X
+        eixoX(lineChart.getXAxis(), myData);
+
+        //eixo Y
+        eixoY(lineChart.getAxisRight(), 12f);
+
+
+        LineDataSet dataSet = entries(myData);
+
+        //degrade
+        drawFilled(dataSet);
+
+        // Setting Data
+        LineData data = new LineData(dataSet);
+        lineChart.setData(data);
+
+        // Remove labels
+        lineChart.getLegend().setEnabled(false);
+
+        //refresh
+        lineChart.invalidate();
+    }
+
+    private void drawFilled(LineDataSet dataSet) {
+
         dataSet.setDrawFilled(true);
         if (Utils.getSDKInt() >= 18) {
             Drawable drawable = ContextCompat.getDrawable(this, R.drawable.fade_blue);
@@ -99,9 +98,10 @@ public class MainActivity extends AppCompatActivity {
         } else {
             dataSet.setFillColor(colorBackgroundChart);
         }
+    }
 
-        // FIXME EIXO X
-        XAxis xAxis = lineChart.getXAxis();
+    private void eixoX(XAxis xAxis, MyData myData) {
+
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
 //        xAxis.setTypeface(tfLight); FIXME DESCOMENTE PARA FONTE
         xAxis.setTextSize(10f);
@@ -114,19 +114,22 @@ public class MainActivity extends AppCompatActivity {
         xAxis.setGridColor(colorGridLines);
         xAxis.setGranularity(1f); // one hour
 
-        //FIXME VALORES DO EIXO X
-        final String[] days = new String[]{"07/05", "14/05", "30/05", "03/06", "12/06", "19/08"};
+        final ArrayList<String> entries = new ArrayList<>();
+        for (int x = 0; x < myData.getGrafico().size(); x++) {
+            entries.add(myData.getGrafico().get(x).getData());
+        }
 
         ValueFormatter formatter = new ValueFormatter() {
             @Override
             public String getAxisLabel(float value, AxisBase axis) {
-                return days[(int) value];
+                return entries.get((int) value);
             }
         };
         xAxis.setValueFormatter(formatter);
+    }
 
-        //right side of y axis
-        YAxis yAxisRight = lineChart.getAxisRight();
+    private void eixoY(YAxis yAxisRight, float maxValue) {
+
         yAxisRight.setDrawGridLines(showDrawGridLines);
 
         yAxisRight.setGridColor(colorGridLines);
@@ -145,18 +148,30 @@ public class MainActivity extends AppCompatActivity {
 
         //FIXME VALORES MAX E MIN DO EIXO Y
         yAxisLeft.setAxisMinimum(1f);
-        yAxisLeft.setAxisMaximum(15f);
+        yAxisLeft.setAxisMaximum(maxValue);
         yAxisLeft.setYOffset(-9f);
+    }
 
-        // Setting Data
-        LineData data = new LineData(dataSet);
-        lineChart.setData(data);
+    private LineDataSet entries(MyData myData) {
 
-        // Remove labels
-        lineChart.getLegend().setEnabled(false);
+        ArrayList<Entry> entries = new ArrayList<>();
+        for (int x = 0; x < myData.getGrafico().size(); x++) {
+            entries.add(new Entry(x, myData.getGrafico().get(x).getValor()));
+        }
 
-        //refresh
-        lineChart.invalidate();
+        LineDataSet dataSet = new LineDataSet(entries, "");
+        dataSet.setColor(colorBabyBlueEyes);
+        dataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
+        dataSet.setValueTextColor(colorAlmostWhite);
+        dataSet.setLineWidth(1.5f);
+        dataSet.setDrawCircles(false);
+        dataSet.setDrawValues(false);
+        dataSet.setFillAlpha(65);
+//        dataSet.setFillColor(ColorTemplate.getHoloBlue());
+//        dataSet.setHighLightColor(Color.rgb(244, 117, 117));
+        dataSet.setDrawCircleHole(false);
+
+        return dataSet;
     }
 
 }
